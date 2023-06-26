@@ -5,10 +5,10 @@ mod tests {
    #[test]
    fn dna_complement_sequence() {
       let strands = [
-         DNA::new("test0", "ACTG", Shape::LINE).unwrap(),
-         DNA::new("test1", "TTAA", Shape::LINE).unwrap(),
-         DNA::new("test2", "GCCGTTACGGCCAA", Shape::LINE).unwrap(),
-         DNA::new("test3", "A", Shape::LINE).unwrap(),
+         DNA::new("test0", "ACTG", Shape::LINEAR).unwrap(),
+         DNA::new("test1", "TTAA", Shape::LINEAR).unwrap(),
+         DNA::new("test2", "GCCGTTACGGCCAA", Shape::LINEAR).unwrap(),
+         DNA::new("test3", "A", Shape::LINEAR).unwrap(),
       ];
 
       assert_eq!(strands[0].complement_raw_sequence(), "TGAC");
@@ -21,19 +21,19 @@ mod tests {
 
    #[test]
    fn dna_throws_error() {
-      assert!(DNA::new("err1", "", Shape::LINE).is_none());
-      assert!(DNA::new("err2", "FFF", Shape::LINE).is_none());
-      assert!(DNA::new("err3", "123", Shape::LINE).is_none());
-      assert!(DNA::new("err4", "--++", Shape::LINE).is_none());
+      assert!(DNA::new("err1", "", Shape::LINEAR).is_none());
+      assert!(DNA::new("err2", "FFF", Shape::LINEAR).is_none());
+      assert!(DNA::new("err3", "123", Shape::LINEAR).is_none());
+      assert!(DNA::new("err4", "--++", Shape::LINEAR).is_none());
    }
 
    #[test]
    fn rna_complement_sequence() {
       let strands = [
-         RNA::new("test0", "ACUG", Shape::LINE).unwrap(),
-         RNA::new("test1", "UUAA", Shape::LINE).unwrap(),
-         RNA::new("test2", "GCCGUUACGGCCAA", Shape::LINE).unwrap(),
-         RNA::new("test3", "A", Shape::LINE).unwrap(),
+         RNA::new("test0", "ACUG", Shape::LINEAR).unwrap(),
+         RNA::new("test1", "UUAA", Shape::LINEAR).unwrap(),
+         RNA::new("test2", "GCCGUUACGGCCAA", Shape::LINEAR).unwrap(),
+         RNA::new("test3", "A", Shape::LINEAR).unwrap(),
       ];
 
       assert_eq!(strands[0].complement_raw_sequence(), "UGAC");
@@ -45,10 +45,10 @@ mod tests {
 
    #[test]
    fn rna_throws_error() {
-      assert!(RNA::new("err1", "", Shape::LINE).is_none());
-      assert!(RNA::new("err2", "FFF", Shape::LINE).is_none());
-      assert!(RNA::new("err3", "123", Shape::LINE).is_none());
-      assert!(RNA::new("", "--++", Shape::LINE).is_none());
+      assert!(RNA::new("err1", "", Shape::LINEAR).is_none());
+      assert!(RNA::new("err2", "FFF", Shape::LINEAR).is_none());
+      assert!(RNA::new("err3", "123", Shape::LINEAR).is_none());
+      assert!(RNA::new("", "--++", Shape::LINEAR).is_none());
    }
 }
 
@@ -85,7 +85,7 @@ trait Plasmid {
  #[derive(Debug, Clone)]
  enum Shape {
     CIRCULAR,
-    LINE
+    LINEAR
  }
  
  enum Enzyme {
