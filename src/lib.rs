@@ -48,7 +48,7 @@ mod tests {
       assert!(RNA::new("err1", "", Shape::LINEAR).is_none());
       assert!(RNA::new("err2", "FFF", Shape::LINEAR).is_none());
       assert!(RNA::new("err3", "123", Shape::LINEAR).is_none());
-      assert!(RNA::new("", "--++", Shape::LINEAR).is_none());
+      assert!(RNA::new("err4", "--++", Shape::LINEAR).is_none());
    }
 }
 
