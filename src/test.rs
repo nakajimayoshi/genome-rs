@@ -29,6 +29,7 @@ mod tests {
        assert!(DNA::new("err2", "FFF", Shape::LINEAR).is_none());
        assert!(DNA::new("err3", "123", Shape::LINEAR).is_none());
        assert!(DNA::new("err4", "--++", Shape::LINEAR).is_none());
+       assert!(DNA::new("err4", "AA TT", Shape::LINEAR).is_none());
     }
  
     #[test]
@@ -53,6 +54,7 @@ mod tests {
        assert!(RNA::new("err2", "FFF", Shape::LINEAR).is_none());
        assert!(RNA::new("err3", "123", Shape::LINEAR).is_none());
        assert!(RNA::new("err4", "--++", Shape::LINEAR).is_none());
+       assert!(RNA::new("err4", "AA UU", Shape::LINEAR).is_none());
     }
     // Rest of the tests
 }
