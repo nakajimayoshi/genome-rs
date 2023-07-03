@@ -10,18 +10,29 @@ pub struct RNA {
     shape: shape::Shape,
 }
 
+fn is_valid_rna_sequence(sequence: &str) -> bool {
+
+    if sequence.is_empty() {
+        return false;
+    }
+
+    let formatted_sequence = sequence.to_ascii_uppercase();
+ 
+    formatted_sequence.chars().all(|c| match c {
+        'A' | 'U' | 'C' | 'G' | 'N' => true,
+        _ => false,
+    })
+}
+
 impl RNA {
     pub fn new(name: &str, sequence: &str, shape: shape::Shape) -> Option<Self> {
-        let is_invalid_sequence = sequence.is_empty() || sequence.chars().any(|c| match c {
-            'A' | 'U' | 'C' | 'G' => false,
-            _ => true,
-        }); 
+
         
-        if is_invalid_sequence {
+        if !is_valid_rna_sequence(sequence) {
             println!("Invalid sequence provided");
             return None;
         }
-        
+
         Some (
             Self {
             name: name.to_string(),

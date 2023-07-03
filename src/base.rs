@@ -1,14 +1,16 @@
 #[derive(Debug, Clone)]
 pub enum DNABase {
-    ADENINE(char),
-    CYTOSINE(char),
-    THYMINE(char),
-    GUANINE(char),
+    ADENINE,
+    CYTOSINE,
+    THYMINE,
+    GUANINE,
+    ANY,
 }
 
 pub enum RNABase {
-    ADENINE(char),
-    CYTOSINE(char),
-    GUANINE(char),
-    URACIL(char),
+    ADENINE,
+    CYTOSINE,
+    GUANINE,
+    URACIL,
+    ANY,
 }

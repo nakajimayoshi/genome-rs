@@ -22,8 +22,6 @@ pub trait NucleicAcid {
 
     fn raw_sequence(&self) -> String;
 
-    fn check_sequence(sequence: &str) -> Option<&str>;
-
 }
 
 impl NucleicAcid for dna::DNA {
@@ -33,10 +31,11 @@ impl NucleicAcid for dna::DNA {
     
         for base in sequence.chars() {
             match base.to_ascii_uppercase() {
-                'A' => result.push(base::DNABase::ADENINE('A')),
-                'C' => result.push(base::DNABase::CYTOSINE('C')),
-                'T' => result.push(base::DNABase::THYMINE('T')),
-                'G' => result.push(base::DNABase::GUANINE('G')),
+                'A' => result.push(base::DNABase::ADENINE),
+                'C' => result.push(base::DNABase::CYTOSINE),
+                'T' => result.push(base::DNABase::THYMINE),
+                'G' => result.push(base::DNABase::GUANINE),
+                'N' => result.push(base::DNABase::ANY),
                 _ => println!("Empty space found in sequence {}", base)
             }
         }
@@ -47,11 +46,12 @@ impl NucleicAcid for dna::DNA {
         let mut result = vec![];
         
         for base in self.raw_sequence().chars() {
-            match base {
+            match base.to_ascii_uppercase() {
                 'A' => result.push('T'),
                 'C' => result.push('G'),
                 'T' => result.push('A'),
                 'G' => result.push('C'),
+                'N' => result.push('N'),
                 _ => println!("No base found")
             }
         }
@@ -69,20 +69,10 @@ impl NucleicAcid for dna::DNA {
             'C' => 'G',
             'T' => 'A',
             'G' => 'C',
+            'N' => 'N',
             _ => panic!("Invalid base"),
         }
     }
-    
-    fn check_sequence(sequence: &str) -> Option<&str> {
-        for c in sequence.chars() {
-            match c {
-                'A' | 'T' | 'C' | 'G' => {},
-                _ => return None,
-            }
-        }
-        Some(sequence)
-    }
-    
     
 }
 
@@ -91,14 +81,17 @@ impl NucleicAcid for rna::RNA {
     
     fn string_to_sequence(sequence: &str) -> Vec<Self::BasePair> {
         let mut result = vec![];
+        let mut index = 0;
     
         for base in sequence.chars() {
+            index += 1;
             match base.to_ascii_uppercase() {
-                'A' => result.push(base::RNABase::ADENINE('A')),
-                'C' => result.push(base::RNABase::CYTOSINE('C')),
-                'T' => result.push(base::RNABase::URACIL('U')),
-                'G' => result.push(base::RNABase::GUANINE('G')),
-                _ => println!("Empty space found in sequence {}", base)
+                'A' => result.push(base::RNABase::ADENINE),
+                'C' => result.push(base::RNABase::CYTOSINE),
+                'U' => result.push(base::RNABase::URACIL),
+                'G' => result.push(base::RNABase::GUANINE),
+                'N' => result.push(base::RNABase::ANY),
+                _ => println!("Invalid char found in sequence {} at index: {}", sequence, index)
             }
         }
         return result;
@@ -108,11 +101,12 @@ impl NucleicAcid for rna::RNA {
         let mut result = vec![];
         
         for base in self.raw_sequence().chars() {
-            match base {
+            match base.to_ascii_uppercase() {
                 'A' => result.push('U'),
                 'C' => result.push('G'),
                 'U' => result.push('A'),
                 'G' => result.push('C'),
+                'N' => result.push('N'),
                 _ => println!("No base found")
             }
         }
@@ -130,19 +124,8 @@ impl NucleicAcid for rna::RNA {
             'C' => 'G',
             'U' => 'A',
             'G' => 'C',
+            'N' => 'N',
             _ => panic!("Invalid base"),
         }
-    }
-    
-    fn check_sequence(sequence: &str) -> Option<&str> {
-        for c in sequence.chars() {
-            match c {
-                'A' | 'U' | 'C' | 'G' => {},
-                _ => return None,
-            }
-        }
-        Some(sequence)
-    }
-    
-    
+    }    
 }
