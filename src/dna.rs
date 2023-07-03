@@ -4,8 +4,11 @@ use crate::traits;
 
 pub struct DNA {
     name: String,
+    /// We want to keep the raw sequence around for debugging purposes, as well as interop between lower and upper case
     pub raw_sequence: String,
+    /// Sequence is the parsed version of the raw sequence
     sequence: Vec<base::DNABase>,
+    /// Refers to the shape of the DNA molecule
     shape: shape::Shape,
 }
 
@@ -40,6 +43,18 @@ impl DNA {
             shape: shape            
             }
         )
+    }
+
+    pub fn get_name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn get_shape(&self) -> &shape::Shape {
+        &self.shape
+    }
+
+    pub fn get_sequence(&self) -> &Vec<base::DNABase> {
+        &self.sequence
     }
 }
 

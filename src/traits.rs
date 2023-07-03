@@ -2,14 +2,42 @@ use crate::base;
 use crate::dna;
 use crate::rna;
 
+/// `NucleicAcid` trait represents the common behavior of nucleic acids.
+///
+/// # Examples
+///
+/// Implementations for DNA and RNA are provided.
 pub trait NucleicAcid {
-
+    /// The base pair type.
     type BasePair;
 
+    /// Converts a string to a sequence of base pairs.
+    ///
+    /// # Parameters
+    ///
+    /// * `sequence`: A string representation of the nucleic acid sequence.
+    ///
+    /// # Returns
+    ///
+    /// A `Vec` containing the base pairs in the sequence.
     fn string_to_sequence(sequence: &str) -> Vec<Self::BasePair>;
 
+    /// Returns the complement of a base.
+    ///
+    /// # Parameters
+    ///
+    /// * `base`: A `char` representation of the base.
+    ///
+    /// # Returns
+    ///
+    /// The `char` representation of the complement base.
     fn complement_base(&self, base: char) -> char;
 
+    /// Returns the complement of a sequence.
+    ///
+    /// # Returns
+    ///
+    /// The `String` representation of the complement sequence.
     fn complement_raw_sequence(&self) -> String {
         let mut result = vec![];
     
@@ -20,12 +48,19 @@ pub trait NucleicAcid {
         return result.into_iter().collect();
     }
 
+    /// Returns the raw sequence as a String.
+    ///
+    /// # Returns
+    ///
+    /// The `String` representation of the raw sequence.
     fn raw_sequence(&self) -> String;
 
 }
 
 impl NucleicAcid for dna::DNA {
     type BasePair = base::DNABase;
+
+    /// Converts a string to a sequence of DNA specific base pairs
     fn string_to_sequence(sequence: &str) -> Vec<Self::BasePair> {
         let mut result = vec![];
     
@@ -78,7 +113,8 @@ impl NucleicAcid for dna::DNA {
 
 impl NucleicAcid for rna::RNA {
     type BasePair = base::RNABase;
-    
+
+    /// Converts a string to a sequence of RNA specific base pairs
     fn string_to_sequence(sequence: &str) -> Vec<Self::BasePair> {
         let mut result = vec![];
         let mut index = 0;

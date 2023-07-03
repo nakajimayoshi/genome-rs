@@ -42,4 +42,20 @@ impl RNA {
             }
         )
     }
+
+    pub fn get_name(&self) -> &str {
+        &self.name
     }
+
+    pub fn get_shape(&self) -> &shape::Shape {
+        &self.shape
+    }
+
+    pub fn get_sequence(&self) -> &Vec<base::RNABase> {
+        &self.sequence
+    }
+
+    fn morph(&mut self, shape: shape::Shape) {
+        self.shape = shape;
+    }
+}
