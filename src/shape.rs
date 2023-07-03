@@ -1,6 +1,6 @@
 
 //! Shape enum
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum Shape {
     CIRCULAR,
     LINEAR,

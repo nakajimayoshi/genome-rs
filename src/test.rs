@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod tests {
+mod nucleotide_tests {
     use crate::dna::DNA;
     use crate::rna::RNA;
     use crate::shape::Shape;
@@ -75,4 +75,45 @@ mod tests {
        assert!(RNA::new("err4", "AA NUU", Shape::LINEAR).is_none());
     }
     // Rest of the tests
+}
+
+
+#[cfg(test)]
+mod enzyme_tests {
+   use crate::enzyme;
+
+   #[test]
+   fn test_get_sequence() {
+      let eco_r1 = enzyme::RestrictionEnzyme::new("EcoRI").unwrap();
+      assert_eq!(eco_r1.recognition_sequence(), "GAATTC");
+
+      let eco_rv = enzyme::RestrictionEnzyme::new("EcoRV").unwrap();
+      assert_eq!(eco_rv.recognition_sequence(), "GATATC");
+
+      let bsa_ai = enzyme::RestrictionEnzyme::new("BsaAI").unwrap();
+      assert_eq!(bsa_ai.recognition_sequence(), "YACGTR");
+
+      let bsa_bi = enzyme::RestrictionEnzyme::new("BsaBI").unwrap();
+      assert_eq!(bsa_bi.recognition_sequence(), "GATNNNNATC");
+
+      let bsa_hi = enzyme::RestrictionEnzyme::new("BsaHI").unwrap();
+      assert_eq!(bsa_hi.recognition_sequence(), "GRCGYC");
+
+      let bsi_ei = enzyme::RestrictionEnzyme::new("BsiEI").unwrap();
+      assert_eq!(bsi_ei.recognition_sequence(), "CGRYCG");
+
+      let bsr_bi = enzyme::RestrictionEnzyme::new("BsrBI").unwrap();
+      assert_eq!(bsr_bi.recognition_sequence(), "CCGCTC");
+
+      let bst_bi = enzyme::RestrictionEnzyme::new("BstBI").unwrap();
+      assert_eq!(bst_bi.recognition_sequence(), "TTCGAA");
+
+      let bst_ui = enzyme::RestrictionEnzyme::new("BstUI").unwrap();
+      assert_eq!(bst_ui.recognition_sequence(), "CGCG");
+
+      let bsa_wi = enzyme::RestrictionEnzyme::new("BsaWI").unwrap();
+      assert_eq!(bsa_wi.recognition_sequence(), "WCCGGW");
+
+   }
+
 }

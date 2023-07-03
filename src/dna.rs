@@ -1,6 +1,7 @@
 use crate::base;
 use crate::shape;
 use crate::traits;
+use crate::traits::NucleicAcid;
 
 pub struct DNA {
     name: String,
@@ -45,16 +46,36 @@ impl DNA {
         )
     }
 
-    pub fn get_name(&self) -> &str {
+    pub fn name(&self) -> &str {
         &self.name
     }
 
-    pub fn get_shape(&self) -> &shape::Shape {
-        &self.shape
+    pub fn shape(&self) -> shape::Shape {
+        self.shape
     }
 
-    pub fn get_sequence(&self) -> &Vec<base::DNABase> {
+    pub fn sequence(&self) -> &Vec<base::DNABase> {
         &self.sequence
+    }
+
+    fn five_prime_top(&self) -> base::DNABase {
+        self.sequence[0]
+    }
+
+    fn three_prime_top(&self) -> base::DNABase {
+        self.sequence[self.sequence.len() - 1]
+    }
+
+    fn five_prime_bottom(&self) -> base::DNABase {
+        // first base in the complementary sequence
+        let bottom_strand = <DNA as traits::NucleicAcid>::string_to_sequence(self.complement_raw_sequence().as_str());
+        return bottom_strand[bottom_strand.len() - 1];
+    }
+
+    fn three_prime_bottom(&self) -> base::DNABase {
+        // last base in the complementary sequence
+        let bottom_strand = <DNA as traits::NucleicAcid>::string_to_sequence(self.complement_raw_sequence().as_str());
+        return bottom_strand[0];
     }
 }
 

@@ -1,100 +1,68 @@
-pub enum RestrictionEnzymeType {
-    AatII,
-    AgeI,
-    ApaI,
-    AvaI,
-    BamHI,
-    BglII,
-    BsaI,
-    BsmBI,
-    BsrFI,
-    BsrGI,
-    BssHII,
-    BstEII,
-    BstZ17I,
-    CspI,
-    ClaI,
-    DpnI,
-    DraI,
-    EagI,
-    EcoNI,
-    EcoR1,
-    EcoRII,
-    FokI,
-    HaeII,
-    HaeIII,
-    HhaI,
-    HincII,
-    HindIII,
-    HpaI,
-    HpaII,
-    Kpn2I,
-    KpnI,
-    MboI,
-    MfeI,
-    MluI,
-    MluNI,
-    NcoI,
-    NdeI,
-    NdeII,
-    NheI,
-    NlaIII,
-    NlaIV,
-    NotI,
-    PmeI,
-    PstI,
-    PsiI,
-    PvuI,
-    PvuII,
-    RsaI,
-    SacI,
-    SacII,
-    SalI,
-    ScaI,
-    SfiI,
-    SgrAI,
-    SmaI,
-    SnaBI,
-    SnaI,
-    SphI,
-    SspI,
-    SpeI,
-    StuI,
-    TaqI,
-    TliI,
-    Tth111I,
-    Uba1314I,
-    XbaI,
-    XhoI,
-    XmaCI,
-    XmaI,
-}
+use std::collections::HashMap;
+use std::error::Error;
+use regex::Regex;
 
-fn get_recognition_sequence(enzyme: RestrictionEnzymeType) -> &'static str {
-    match enzyme {
-        RestrictionEnzymeType::AatII => "GACGTC",
-        RestrictionEnzymeType::AgeI => "ACCGGT",
+fn read_enzymes(file_path: &str) -> Result<HashMap<String, String>, Box<dyn Error>> {
+    let mut rdr = csv::Reader::from_path(file_path)?;
+    let mut enzymes = HashMap::new();
 
-        _ => panic!("Invalid enzyme type provided"),
+    for result in rdr.records() {
+        let record = result?;
+        let sequence = record[0].to_string();
+        let names = record[1].split_whitespace();
+
+        for name in names {
+            let clean_name = clean_name(name);
+            enzymes.insert(clean_name, sequence.clone());
+        }
     }
+
+    Ok(enzymes)
 }
 
-pub struct RestrictionEnzyme {
-    name: String,
-    enzyme_type: RestrictionEnzymeType,
+fn clean_name(name: &str) -> String {
+    let mut cleaned = name.to_string();
+    cleaned.retain(|c| c.is_alphanumeric());
+    return cleaned;
+}
+
+fn get_enzyme_sequence(enzyme_name: &str) -> Result<String, Box<dyn Error>> {
+    let enzymes = read_enzymes("enzymes.csv")?;
+    let re = Regex::new(r"[^a-zA-Z ]").unwrap(); // Matches anything that's not a letter or a space
+
+    for (name, seq) in enzymes.iter() {
+        if name.contains(enzyme_name) {
+            let cleaned_seq = re.replace_all(seq, "");
+            return Ok(cleaned_seq.to_string());
+        }
+    }
+
+    Err(format!("No sequence found for enzyme {}", enzyme_name).into())
+}
+
+
+pub struct RestrictionEnzyme<'a> {
+    name: &'a str,
     recognition_sequence: String,
     cut_offset: usize,
 }
 
-impl RestrictionEnzyme {
-    pub fn new(name: &str, enzyme_type: RestrictionEnzymeType, recognition_sequence: &str, cut_offset: usize) -> Self {
-        Self {
-            name: name.to_string(),
-            enzyme_type,
+impl<'a> RestrictionEnzyme<'a> {
+    pub fn new(name: &'a str) -> Result<Self, Box<dyn Error>> {
+        let recognition_sequence = get_enzyme_sequence(name)?;
+        let cut_offset = recognition_sequence.len() / 2;
+        Ok(Self {
+            name,
             recognition_sequence: recognition_sequence.to_string(),
             cut_offset,
-        }
+        })
     }
 
-    
+    pub fn name(&self) -> &'a str {
+        self.name
+    }
+
+    pub fn recognition_sequence(&self) -> &str {
+        &self.recognition_sequence
+    }
 }
